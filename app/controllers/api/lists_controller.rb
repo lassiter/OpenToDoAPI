@@ -9,6 +9,14 @@ class Api::ListsController < ApiController
       render json: { errors: list.errors.full_messages }, status: :unprocessable_entity
     end
   end
+  def update
+    list = List.find(params[:id])
+    if list.update(list_params)
+      render json: list
+    else
+      render json: { errors: list.errors.full_messages }, status: :unprocessable_entity
+    end
+  end
   def destroy
     begin
       list = List.find(params[:id])
@@ -21,8 +29,8 @@ class Api::ListsController < ApiController
 
   private
     def list_params
-      return if params[:user_id].blank? 
-      return if params[:title].blank? 
+      raise("user_id is blank!") if params[:user_id].blank? 
+      raise("title is blank!") if params[:list][:title].blank? 
       hash = params.require(:list).permit(:title, :private)
       hash.merge({"user_id" => params[:user_id]})
     end
