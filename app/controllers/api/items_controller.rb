@@ -9,12 +9,20 @@ class Api::ItemsController < ApiController
       render json: { errors: item.errors.full_messages }, status: :unprocessable_entity
     end
   end
+  def update
+    item = Item.find(params[:id])
+    if item.update(item_params)
+      render json: item
+    else
+      render json: { errors: item.errors.full_messages }, status: :unprocessable_entity
+    end
+  end
 
   private
     def item_params
-      return if params[:list_id].blank? 
-      return if params[:task].blank? 
-      hash = params.require(:item).permit(:task)
+      raise("list_id is blank!") if params[:list_id].blank? 
+      raise("task is blank!") if params[:item][:task].blank? 
+      hash = params.require(:item).permit(:task, :completed)
       hash.merge({"list_id" => params[:list_id]})
     end
 end
