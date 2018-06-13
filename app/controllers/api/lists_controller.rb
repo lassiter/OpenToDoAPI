@@ -28,9 +28,7 @@ class Api::ListsController < ApiController
   end
 
   private
-    def list_params
-      raise("user_id is blank!") if params[:user_id].blank? 
-      raise("title is blank!") if params[:list][:title].blank? 
+    def list_params 
       hash = params.require(:list).permit(:title, :private)
       hash.merge({"user_id" => params[:user_id]})
     end

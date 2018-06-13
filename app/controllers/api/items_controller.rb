@@ -20,8 +20,6 @@ class Api::ItemsController < ApiController
 
   private
     def item_params
-      raise("list_id is blank!") if params[:list_id].blank? 
-      raise("task is blank!") if params[:item][:task].blank? 
       hash = params.require(:item).permit(:task, :completed)
       hash.merge({"list_id" => params[:list_id]})
     end
